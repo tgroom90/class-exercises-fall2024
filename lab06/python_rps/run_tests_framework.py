@@ -51,6 +51,23 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(rps('paper', 'rock'), 'Paper wins!')
 
     # add additional tests below
+    
+    def test_rock_beats_scissors(self):
+        self.assertEqual(rps('rock', 'scissors'), 'Rock wins!')
+        self.assertEqual(rps('scissors', 'rock'), 'Rock wins!')
+
+    def test_scissors_beats_paper(self):
+        self.assertEqual(rps('scissors', 'paper'), 'Scissors wins!')
+        self.assertEqual(rps('paper', 'scissors'), 'Scissors wins!')
+
+    def test_rock_tie(self):
+        self.assertEqual(rps('rock', 'rock'), 'Tie!')
+
+    def test_paper_tie(self):
+        self.assertEqual(rps('paper', 'paper'), 'Tie!')
+
+    def test_scissors_tie(self):
+        self.assertEqual(rps('scissors', 'scissors'), 'Tie!')
 
 
 if __name__ == '__main__':
