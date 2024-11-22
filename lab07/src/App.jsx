@@ -39,6 +39,8 @@ export default function App() {
                         />
                     );
                 })}
+
+                {/* Example of initializing the value specified in the component tag! */}
                 {<ButtonCount initialCount={72} />}
             </main>
         </>
