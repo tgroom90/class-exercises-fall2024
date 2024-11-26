@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Carousel } from 'antd';
-import { Image } from 'antd';
+import { Form, Input, InputNumber, Button } from 'antd';
 
 export default function App() {
+
+    const [tracks, setTracks] = useState(null);
 
     const carouselStyles = {
         "width": "640px",
@@ -10,54 +12,8 @@ export default function App() {
         "margin": "auto"
     };
 
-    const albums = [
-        {
-            "id": "6BzxX6zkDsYKFJ04ziU5xQ",
-            "name": "COWBOY CARTER",
-            "image_url": "https://i.scdn.co/image/ab67616d0000b2731572698fff8a1db257a53599",
-            "spotify_url": "https://open.spotify.com/album/6BzxX6zkDsYKFJ04ziU5xQ"
-        },
-        {
-            "id": "2UJwKSBUz6rtW4QLK74kQu",
-            "name": "BEYONCÉ [Platinum Edition]",
-            "image_url": "https://i.scdn.co/image/ab67616d0000b2730d1d6e9325275f104f8e33f3",
-            "spotify_url": "https://open.spotify.com/album/2UJwKSBUz6rtW4QLK74kQu"
-        },
-        {
-            "id": "6PeoltoiWQWCyWA0JBHVGN",
-            "name": "16 CARRIAGES",
-            "image_url": "https://i.scdn.co/image/ab67616d0000b273f5220893852002a2a3078bab",
-            "spotify_url": "https://open.spotify.com/album/6PeoltoiWQWCyWA0JBHVGN"
-        },
-        {
-            "id": "6oxVabMIqCMJRYN1GqR3Vf",
-            "name": "Dangerously In Love",
-            "image_url": "https://i.scdn.co/image/ab67616d0000b27345680a4a57c97894490a01c1",
-            "spotify_url": "https://open.spotify.com/album/6oxVabMIqCMJRYN1GqR3Vf"
-        },
-        {
-            "id": "2m1enA3YrMLVvR3q0MqLpL",
-            "name": "COWBOY CARTER",
-            "image_url": "https://i.scdn.co/image/ab67616d0000b2734903a9678d5664b9cd9a3fd8",
-            "spotify_url": "https://open.spotify.com/album/2m1enA3YrMLVvR3q0MqLpL"
-        }
-    ];
-
-    function albumToJSX(albumJSON) {
+    function trackToJSX(track) {
         return (
-            <div key={albumJSON.id}>
-                <img src={albumJSON.image_url} />
-                <h3>{albumJSON.name}</h3>
-            </div>
-        )
-    }
-
-    //Not sure where this goes or what it does
-    const [tracks, setTracks] = useState([]);
-
-    // Not sure how to use this or if it works
-    const renderIframes = (tracks) => {
-        return tracks.map((track) => (
             <iframe
                 key={track.id}  // Unique key for each iframe
                 src={`https://open.spotify.com/embed/track/${track.id}`}  // Spotify embed URL with track ID
@@ -69,24 +25,29 @@ export default function App() {
                 loading="lazy"
                 title={track.name}  // Track name as the iframe title for accessibility
             ></iframe>
-        ));
-    };
+        )
+    }
 
-    // Partial or complete code stub from assignment?? I'm not sure.
-    async function fetchData() {
+
+    async function fetchData(searchTerm, limit) {
+        const dataType = "track";
         const baseURL = 'https://www.apitutor.org/spotify/simple/v1/search';
-        const url = `${baseURL}?q=${searchTerm}&type=${dataType}&limit=5`;
+        const url = `${baseURL}?q=${searchTerm}&type=${dataType}&limit=${limit}`;
+        console.log(url);
         const request = await fetch(url);
         const data = await request.json();
         console.log(data);
-        // set state variable to redraw...
-        // I am not sure what to do here or what the above comment is referring to. What state variable?? How do we redraw it???
+        setTracks(data);
+
     }
 
+    const onFinish = (values) => {
+        console.log('Success:', values);
+        fetchData(values.searchTerm, values.songLimit)
+    };
     return (
         // Much of this is placeholder for now
         <><Form
-            form={form}
             layout="vertical" // Layout of the form
             onFinish={onFinish} // Handle form submission
             initialValues={{ songLimit: 10 }} // Default value for the number of songs
@@ -117,10 +78,10 @@ export default function App() {
             </Form.Item>
         </Form>
 
-            <div style={carouselStyles}>
+            {tracks && <div style={carouselStyles}>
                 <Carousel dotPosition="top">
-                    {albums.map(albumToJSX)}
+                    {tracks.map(trackToJSX)}
                 </Carousel>
-            </div></>
+            </div>}</>
     );
 }
