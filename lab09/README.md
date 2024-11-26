@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Activity 4 -- Experimenting with SQL from Python
 
 This activity is designed to be completed entirely in class.
@@ -62,3 +63,7 @@ $ poetry run python orm.py
 ## Examples
 
 We'll muddle through some examples in class
+=======
+# Lab 7 Instructions
+Please see <a href="https://csci338.github.io/fall2024/assignments/lab09" target="_blank">Lab 9 Instructions</a> on the course website.
+>>>>>>> fda14507e31233f2a0241e2992ae5b4289c3983b
