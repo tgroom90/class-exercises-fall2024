@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import joinedload, selectinload
 
+from models import User
 import models
 import serializers
 from db import Base, engine, get_db
@@ -35,18 +36,25 @@ async def startup():
 # Task 1
 @app.get("/api/departments/", response_model=List[str])
 async def get_department_codes(db: AsyncSession = Depends(get_db)):
-    # replace with your code...
-    return []
+    result = await db.execute(
+        select(models.Course.department).distinct()
+    )
+    departments = result.scalars().all()
+    return departments
 
 
 # Task 2
 # Note: replace response_model=object with response_model=User once you've got this working
-@app.get("/api/users/{username}", response_model=object)
+@app.get("/api/users/{username}", response_model=serializers.User)
 async def get_users_by_username(
     username: str, db: AsyncSession = Depends(get_db)
 ):
-    # replace with your code...
-    return {}
+    result = await db.execute(
+        select(models.User).filter(models.User.username == username)
+    )
+    user = result.scalars().first()
+
+    return user
 
 
 # Task 3
@@ -56,6 +64,9 @@ async def get_courses(
     instructor: str = Query(None),
     department: str = Query(None),
     hours: int = Query(None),
+    is_di: bool = Query(None),
+    is_open: bool = Query(None),
+    days: str = Query(None),
     db: AsyncSession = Depends(get_db),
 ):
 
@@ -86,6 +97,12 @@ async def get_courses(
                 models.Instructor.first_name.ilike(f"%{instructor}%"),
             )
         )
+    if is_di is not None:
+        query = query.where(models.Course.diversity_intensive == is_di)
+    if is_open is not None:
+        query = query.where(models.Course.open == is_open)
+    if days:
+        query = query.where(models.Course.days.ilike(f"%{days}%"))
 
     result = await db.execute(
         query.order_by(models.Course.department, models.Course.code)
@@ -170,6 +187,13 @@ async def read_schedule(db: AsyncSession = Depends(get_db)):
     schedules = result.scalars().all()
     return schedules
 
+#@app.get("/api/departments/", response_model=List[str])
+#async def get_departments(db: AsyncSession = Depends(get_db)):
+#    result = await db.execute(
+#        select(models.Course.department).distinct()
+#    )
+#    departments = result.scalars().all()
+#    return departments
 
 # @app.post("/api/schedules/", response_model=serializers.Schedule)
 # async def create_schedule(
