@@ -23,7 +23,8 @@ class CourseInstructor(Base):
     __tablename__ = "course_instructors"
 
     course_id = Column(Integer, ForeignKey("courses.crn"), primary_key=True)
-    instructor_id = Column(Integer, ForeignKey("instructors.id"), primary_key=True)
+    instructor_id = Column(Integer,
+                            ForeignKey("instructors.id"), primary_key=True)
 
 
 class Location(Base):

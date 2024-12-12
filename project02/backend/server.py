@@ -7,7 +7,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import joinedload, selectinload
 
-from models import User
 import models
 import serializers
 from db import Base, engine, get_db
@@ -44,7 +43,8 @@ async def get_department_codes(db: AsyncSession = Depends(get_db)):
 
 
 # Task 2
-# Note: replace response_model=object with response_model=User once you've got this working
+# Note: replace response_model=object with
+# response_model=User once you've got this working
 @app.get("/api/users/{username}", response_model=serializers.User)
 async def get_users_by_username(
     username: str, db: AsyncSession = Depends(get_db)
@@ -186,35 +186,6 @@ async def read_schedule(db: AsyncSession = Depends(get_db)):
     )
     schedules = result.scalars().all()
     return schedules
-
-#@app.get("/api/departments/", response_model=List[str])
-#async def get_departments(db: AsyncSession = Depends(get_db)):
-#    result = await db.execute(
-#        select(models.Course.department).distinct()
-#    )
-#    departments = result.scalars().all()
-#    return departments
-
-# @app.post("/api/schedules/", response_model=serializers.Schedule)
-# async def create_schedule(
-#     schedule: serializers.ScheduleCreate,
-#     user_id: int,
-#     db: AsyncSession = Depends(get_db),
-# ):
-#     # Fetch the user
-#     result = await db.execute(
-#         select(models.User).where(models.User.id == user_id)
-#     )
-#     user = result.scalar_one_or_none()
-#     if user is None:
-#         raise HTTPException(status_code=404, detail="User not found")
-
-#     # Create a new schedule
-#     new_schedule = models.Schedule(name=schedule.name, user_id=user_id)
-#     db.add(new_schedule)
-
-#     await db.commit()
-#     return new_schedule
 
 
 @app.get("/api/schedules/{username}", response_model=serializers.Schedule)

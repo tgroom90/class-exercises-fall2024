@@ -16,7 +16,8 @@ class Base(DeclarativeBase):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
-# DATABASE_URL = "postgresql+asyncpg://user:password@localhost:5432/course_planner_db"
+# DATABASE_URL = "postgresql+asyncpg:
+# //user:password@localhost:5432/course_planner_db"
 DATABASE_URL = URL.create(
     drivername="postgresql+asyncpg",
     username=os.environ.get("DB_USERNAME"),
@@ -46,7 +47,8 @@ AsyncSessionLocal = sessionmaker(
     expire_on_commit=False,
 )
 
-SessionLocal = sessionmaker(bind=engine_sync, autocommit=False, autoflush=False)
+SessionLocal = sessionmaker(bind=engine_sync,
+                                autocommit=False, autoflush=False)
 
 
 # Dependency to get the database session

@@ -13,22 +13,6 @@ export async function fetchUser(username) {
 // React Task 3:
 export async function fetchCourses(options = {}) {
     console.log(options);
-    /*
-
-classifications: ["fys", "di", "dir", "arts", "honors", "service"] (6)
-
-days: ["M", "W"] (2)
-
-department: undefined
-
-hours: undefined
-
-instructor: undefined
-
-open: true
-
-title: "Sample"
-    */
     let baseURL = `${rootURL}/api/courses?`;
     if (options.department) {
         baseURL += `department=${options.department}&`;

@@ -32,7 +32,9 @@ export default function CourseSearchForm({ fetchCourses }) {
 
     useEffect(() => {
         async function fetchDepartments() {
-            const response = await fetch("http://localhost:8000/api/departments/");
+            const response = await fetch(
+                "http://localhost:8000/api/departments/",
+            );
             const data = await response.json();
             setDepts(data);
         }
